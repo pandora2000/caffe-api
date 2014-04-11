@@ -81,7 +81,7 @@ def predict_imagenet():
          <input type=submit value=Upload>
     </form>
     '''
-    
+
 if __name__ == '__main__':
     ''' We provide access to two trained models:
         1. Lenet trained with MNISTClassifier for handwritten digit recognition
@@ -94,13 +94,13 @@ if __name__ == '__main__':
     net_lenet = lenet.MNISTClassifier(os.path.join(trained_models_path, 'lenet/lenet.prototxt'), \
                                         os.path.join(trained_models_path, 'lenet/lenet_iter_10000'))
     net_lenet.caffenet.set_phase_test()
-    net_lenet.caffenet.set_mode_gpu()
+    net_lenet.caffenet.set_mode_cpu()
 
 
     net_imagenet = imagenet.ImageNetClassifier(os.path.join(trained_models_path, 'imagenet/imagenet_deploy.prototxt'), \
                                         os.path.join(trained_models_path, 'imagenet/caffe_reference_imagenet_model'))
     net_imagenet.caffenet.set_phase_test()
-    net_imagenet.caffenet.set_mode_gpu()
+    net_imagenet.caffenet.set_mode_cpu()
     
     app.debug = False
     app.run(host='0.0.0.0')

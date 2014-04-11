@@ -1,6 +1,6 @@
 # Caffe API
 
-An API interface to some Caffe models. We use Flask to expose Caffe models previously trained. 
+An API interface to some [Caffe] models. We use Flask to expose Caffe models previously trained. 
 
 We have used the Imagenet python wrapper from the Caffe repositpry and have implemented a Lenet wrapper, in a local module `_caffe`. The image preprocess is done by the wrappers, but for the Lenet we must provide an centered image of a number, to match the structure of the images in the MNIST dataset used for training it.
 
@@ -43,3 +43,5 @@ The response is a JSON file containing the best class prediction, a list with th
   ]
 }
 ```
+
+[Caffe]:https://github.com/BVLC/caffe

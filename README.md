@@ -4,6 +4,10 @@ An API interface to some [Caffe] models. We use Flask to expose Caffe models pre
 
 We have used the Imagenet python wrapper from the Caffe repository and have implemented (based on that) a Lenet wrapper, in a local module `_caffe`. The image preprocess is done by the wrappers, but for the Lenet we must provide a centered image of a number, to match the structure of the images in the MNIST dataset used for training it.
 
+## Setup
+
+You just need to set the path to your trained models in the file [setup.py].
+
 ## Usage
 
 Run the script and wait for the models to load. After all models are loaded the server will be working on port 5000, the models being available in `/lenet` and `/imagenet`, respectively. You can POST a image to a model using, for example, the following command:
@@ -45,3 +49,4 @@ The response is a JSON file containing the best class prediction, a list with th
 ```
 
 [Caffe]:https://github.com/BVLC/caffe
+[setup.py]: https://github.com/cloudwalkio/caffe-api/blob/master/server.py#L92

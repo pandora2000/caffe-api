@@ -20,9 +20,6 @@ def prepare_image(filename):
   img_out = transform.resize(img_out, (IMAGE_DIM,IMAGE_DIM))
 
   img_out = enhance_contrast(img_out, disk(5))
-
-  #binary_image = np.where(img_out > np.mean(img_out),1.0,0.0)
-  #io.imsave("images/new.jpg", t(img_out))
   
   t = lambda x : 1.0  - x/255.
   t = np.vectorize(t)
@@ -30,11 +27,9 @@ def prepare_image(filename):
   img_out = t(img_out)
 
   image = np.empty((1, 1, IMAGE_DIM,IMAGE_DIM), dtype=np.float32)
-
   for i in range(0,IMAGE_DIM):
     for j in range(0,IMAGE_DIM):
       image[:,:,i,j] = img_out[i,j]
-
   return image
 
 
@@ -53,6 +48,9 @@ class MNISTClassifier(object):
     input_blob = [prepare_image(filename)]
     self.caffenet.Forward(input_blob, self._output_blobs)
     return self._output_blobs
+
+  def get_weights(self):
+    return self.caffenet.blobs
 
 def main(argv):
   """

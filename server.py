@@ -16,7 +16,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/lenet', methods=['GET', 'POST'])
 def predict_lenet():
@@ -50,6 +50,17 @@ def predict_lenet():
     </form>
     '''
 
+@app.route('/lenet/weights/<layer_name>', methods=['GET'])
+def lenet_weights(layer_name):
+    res = net_lenet.get_weights()
+    return jsonify(weights=res[layer_name].data[:,:,:,:][0].tolist())
+
+@app.route('/lenet/weights/<layer_name>/<int:feature_index>', methods=['GET'])
+def lenet_weights_detail(layer_name, feature_index):
+    blobs = net_lenet.get_weights()
+    return jsonify(weights=blobs[layer_name].data[:,feature_index,:,:][0].tolist())
+
+
 @app.route('/imagenet', methods=['GET', 'POST'])
 def predict_imagenet():
     if request.method == 'POST':
@@ -82,7 +93,7 @@ def predict_imagenet():
     </form>
     '''
 
-if __name__ == '__main__':
+if __name__ == '__main__':      
     ''' We provide access to two trained models:
         1. Lenet trained with MNISTClassifier for handwritten digit recognition
         2. Imagenet for object recognition 
@@ -94,13 +105,13 @@ if __name__ == '__main__':
     net_lenet = lenet.MNISTClassifier(os.path.join(trained_models_path, 'lenet/lenet.prototxt'), \
                                         os.path.join(trained_models_path, 'lenet/lenet_iter_10000'))
     net_lenet.caffenet.set_phase_test()
-    net_lenet.caffenet.set_mode_cpu()
+    net_lenet.caffenet.set_mode_gpu()
 
-
+                
     net_imagenet = imagenet.ImageNetClassifier(os.path.join(trained_models_path, 'imagenet/imagenet_deploy.prototxt'), \
                                         os.path.join(trained_models_path, 'imagenet/caffe_reference_imagenet_model'))
     net_imagenet.caffenet.set_phase_test()
     net_imagenet.caffenet.set_mode_cpu()
-    
-    app.debug = False
+
+    app.debug = True
     app.run(host='0.0.0.0')
